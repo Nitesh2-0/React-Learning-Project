@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 export default function App() {
+  const [users, setUsers] = useState([]);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("male");
@@ -10,17 +11,28 @@ export default function App() {
 
   function submitHandler(event) {
     event.preventDefault();
+    const newUser = { username, gender, city, msg, email };
+    setUsers([...users, newUser]);
+    console.log(newUser);
 
-    // console.log(event.target.username.value);
-    // console.log(event.target.email.value);
+    setUsername("")
+    setEmail("")
+    setMsg("")
+    setAccept("")
 
-    // console.log(event.target[0].value);
-    // console.log(event.target[1].value);
-
-    // console.log(username + " " + email);
-
-    console.log(username, gender, city, msg);
   }
+
+  let listUser = users.length > 0 ? (
+    users.map((user, index) => (
+      <div key={index}>
+        <h1>{user.username}</h1>
+        <p>{user.city}</p>
+      </div>
+    ))
+  ) : (
+    <h1>No Data Present</h1>
+  );  
+
   return (
     <div>
       <h1>Two Way Binding</h1>
@@ -48,19 +60,17 @@ export default function App() {
           onChange={(e) => {
             setCity(e.target.value);
           }}
-          name=""
-          id=""
+          name="city"
         >
           <option value="mumbai">Mumbai</option>
           <option value="kolkata">Kolkata</option>
-          <option value="chenai">chenai</option>
+          <option value="chennai">Chennai</option>
         </select>
         <br /> <br />
         <textarea
           onChange={(e) => setMsg(e.target.value)}
           value={msg}
           name="msg"
-          id=""
           cols="30"
           rows="5"
         ></textarea>
@@ -68,35 +78,36 @@ export default function App() {
         <br />
         <input
           onChange={(e) => setGender(e.target.value)}
+          checked={gender === "male"}
+          type="radio"
+          name="gender"
           value="male"
-          checked={gender === "male" ? true : false}
-          type="checkbox"
-          name="male"
-          id=""
         />
         male
         <input
           onChange={(e) => setGender(e.target.value)}
-          value="feamle"
-          checked={gender === "feamle" ? true : false}
-          type="checkbox"
-          name="female"
-          id=""
+          checked={gender === "female"}
+          type="radio"
+          name="gender"
+          value="female"
         />
         female
         <br /> <br />
         <input
           onChange={(e) => setAccept(e.target.checked)}
-          checked={accept ? true:false}
-          type="radio"
-          name="radio"
-          id="acceptRadio"
+          checked={accept}
+          type="checkbox"
+          name="accept"
         />
         Accept
         <br />
         <br />
-        <button>Submit</button>
+        <button type="submit">Submit</button>
       </form>
+      <br />
+      <hr />
+      {listUser}
     </div>
   );
 }
+
